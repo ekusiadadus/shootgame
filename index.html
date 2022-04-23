@@ -13,6 +13,10 @@
     }
   </style>
   <div class="absolute text-white text-sm ml-2 mt-1 select-none">
+    <span>Time: </span><span id="timeEl">0</span>
+  </div>
+  <br />
+  <div class="absolute text-white text-sm ml-2 mt-1 select-none">
     <span>Score: </span><span id="scoreEl">0</span>
   </div>
 
@@ -69,6 +73,7 @@
     canvas.width = innerWidth;
     canvas.height = innerHeight;
 
+    const timeEl = document.querySelector("#timeEl");
     const scoreEl = document.querySelector("#scoreEl");
     const startGameBtn = document.querySelector("#startGameElBtn");
     const modalEl = document.querySelector("#modalEl");
@@ -284,6 +289,7 @@
           }
         });
       });
+      timeEl.innerHTML = (new Date() - time) / 1000;
     }
 
     addEventListener("click", (event) => {
@@ -295,7 +301,7 @@
       var time1 = new Date();
 
       answer.push(
-        JSON.stringify(new Ans(time1 - time, velocity.x, velocity.y))
+        JSON.stringify(new Ans((time1 - time) / 1000, velocity.x, velocity.y))
       );
       projectiles.push(
         new Projectile(
@@ -312,6 +318,7 @@
       init();
       animate(), spawnEnemies();
       modalEl.style.display = "none";
+      exportAnswerEl.style.display = "none";
     });
     exportGameElBtn.addEventListener("click", () => {
       answerFromEl.value = answer;
