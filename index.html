@@ -39,12 +39,37 @@
           Start Game
         </button>
       </div>
+
+      <div id="submitGameEl">
+        <button
+          class="bg-green-500 hover:bg-green-600 text-white w-full py-3 rounded-full text-sm"
+          id="submitGameElBtn"
+        >
+          Submit Your Codes
+        </button>
+        <div class="mb-3 xl:w-96" id="submitAnswerEl" style="display: none">
+          <textarea
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            id="submitFormEl"
+            rows="3"
+            placeholder="Submittion"
+          ></textarea>
+        </div>
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          id="submitBtnEl"
+          style="display: none"
+        >
+          Submit!
+        </button>
+      </div>
+
       <div id="answerGameEl">
         <button
           class="bg-yellow-500 hover:bg-yellow-600 text-white w-full py-3 rounded-full text-sm"
           id="exportGameElBtn"
         >
-          Export your answer
+          Export Your answer
         </button>
         <div class="mb-3 xl:w-96" id="exportAnswerEl" style="display: none">
           <textarea
@@ -81,6 +106,10 @@
     const exportGameElBtn = document.querySelector("#exportGameElBtn");
     const exportAnswerEl = document.querySelector("#exportAnswerEl");
     const answerFromEl = document.querySelector("#answerFromEl");
+    const submitGameElBtn = document.querySelector("#submitGameElBtn");
+    const submitFormEl = document.querySelector("#submitFormEl");
+    const submitAnswerEl = document.querySelector("#submitAnswerEl");
+    const submitBtnEl = document.querySelector("#submitBtnEl");
     class Player {
       constructor(x, y, radius, color) {
         this.x = x;
@@ -325,6 +354,22 @@
       if (exportAnswerEl.style.display == "flex")
         exportAnswerEl.style.display = "none";
       else exportAnswerEl.style.display = "flex";
+    });
+    submitGameElBtn.addEventListener("click", () => {
+      submitFormEl.value = "";
+      if (submitAnswerEl.style.display == "flex") {
+        submitAnswerEl.style.display = "none";
+        submitBtnEl.style.display = "none";
+      } else {
+        submitAnswerEl.style.display = "flex";
+        submitBtnEl.style.display = "inline-block";
+      }
+    });
+    submitBtnEl.addEventListener("click", () => {
+      init();
+      animate(), spawnEnemies();
+      modalEl.style.display = "none";
+      exportAnswerEl.style.display = "none";
     });
   </script>
 </div>
