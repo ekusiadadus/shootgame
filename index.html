@@ -217,9 +217,11 @@
     let enemies = [];
     let particles = [];
     let answer = [];
+    let gameState = false;
     let time = new Date();
 
     function init() {
+      gameState = true;
       time = new Date();
       player = new Player(x, y, 10, "white");
       projectiles = [];
@@ -284,6 +286,7 @@
           cancelAnimationFrame(animationId);
           modalEl.style.display = "flex";
           bigScoreEl.innerHTML = score;
+          gameState = false;
           console.log(answer);
         }
         projectiles.forEach((projectile, projectileIndex) => {
@@ -328,10 +331,10 @@
       );
       const velocity = { x: Math.cos(angle) * 5, y: Math.sin(angle) * 5 };
       var time1 = new Date();
-
-      answer.push(
-        JSON.stringify(new Ans((time1 - time) / 1000, velocity.x, velocity.y))
-      );
+      if (gameState === true)
+        answer.push(
+          JSON.stringify(new Ans((time1 - time) / 1000, velocity.x, velocity.y))
+        );
       projectiles.push(
         new Projectile(
           canvas.width / 2,
