@@ -77,18 +77,20 @@ class Projectile {
 
 class Enemy {
   time: Date;
+  point: number;
   x: number;
   y: number;
   radius: number;
   color: string | CanvasGradient | CanvasPattern;
   velocity: { x: number; y: number };
-  constructor(time, x, y, radius, color, velocity) {
+  constructor(time, x, y, radius, color, velocity, point) {
     this.time = time;
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.color = color;
     this.velocity = velocity;
+    this.point = point;
   }
   draw() {
     c.beginPath();
@@ -216,6 +218,7 @@ function spawnEnemies() {
     const color = `hsl(${Math.random() * 360},50%,50%)`;
     const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
     const velocity = { x: Math.cos(angle), y: Math.sin(angle) };
+    const point = Math.floor(1000 * Math.random());
     enemies.push(
       new Enemy(
         (time1.getTime() - time.getTime()) / 1000,
@@ -223,7 +226,8 @@ function spawnEnemies() {
         y,
         radius,
         color,
-        velocity
+        velocity,
+        point
       )
     );
   }, 1000);
@@ -297,7 +301,7 @@ function animate() {
             projectiles.splice(projectileIndex, 1);
           }, 0);
         } else {
-          score += 250;
+          score += enemy.point;
           (<HTMLElement>scoreEl).innerHTML = score.toString();
           setTimeout(() => {
             enemies.splice(enemyIndex, 1);
