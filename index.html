@@ -371,18 +371,20 @@
     });
 
     function checkBullet() {
-      canvasw2 = canvas.width / 2;
-      canvash2 = canvas.height / 2;
       var timer = setInterval(() => {
         if (gameState === false) clearInterval(timer);
         let time1 = (new Date() - time) / 1000;
         submittion.forEach((p, i) => {
           if (p.time <= time1 && p.used === false) {
-            console.log(`x = ${x}`);
-            console.log(`cw = ${canvasw2}`);
-            console.log(`ch = ${canvash2}`);
             projectiles.push(
-              new Projectile(p.time, canvasw2, canvash2, 5, "white", [p.x, p.y])
+              new Projectile(
+                p.time,
+                canvas.width / 2,
+                canvas.height / 2,
+                5,
+                "white",
+                [p.x, p.y]
+              )
             );
             p.used = true;
             console.log(`projectiles1 = ${JSON.stringify(projectiles)}`);
