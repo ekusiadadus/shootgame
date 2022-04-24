@@ -327,59 +327,57 @@ canvas.addEventListener(
 );
 
 function checkBullet() {
-	var timer = setInterval(() => {
-		if (gameState === false) {
-			clearInterval(timer);
-		}
-		let time1 = (new Date() - time) / 1000;
-		submittion.forEach(
-			(p, i) => {
-				if (
-					p.time <= time1 &&
-					(prevtime + 1) > p.time &&
-					prevtime < p.time &&
-					prevtime !== 0
-				) {
-					bulmaToast.toast({
-						message: `Failed... ${JSON.stringify(p)}`,
-						type: "is-danger",
-						dismissible: true,
-						pauseOnHover: true,
-						duration: 2000,
-						animate: { in: "fadeIn", out: "fadeOut" },
-						position: "bottom-center",
-					});
-					console.log(`Failed... ${JSON.stringify(p)}`);
-					submittion.splice(i, 1);
-				} else if (
-					p.time <= time1 && (prevtime === 0 || (prevtime + 1) <= p.time)
-				) {
-					console.log(`canvasw = ${canvas.width / 2}`);
-					projectiles.push(
-						new Projectile(
-							p.time,
-							(canvas.width / 2) + (p.x * (time1 - p.time)),
-							(canvas.height / 2) + (p.y * (time1 - p.time)),
-							5,
-							"white",
-							{ x: p.x, y: p.y },
-						),
-					);
-					answer.push(JSON.stringify(new Ans(p.time, p.x, p.y)));
-					setTimeout(
-						() => {
-							submittion.splice(i, 1);
-						},
-						0,
-					);
-					console.log(`projectiles1 = ${JSON.stringify(projectiles)}`);
-					prevtime = p.time;
-					statusEl.innerHTML = "Reloading...";
-					statusEl.style.backgroundColor = "rgb(239 68 68)";
-				}
-			},
-		);
-	});
+	var timer = setInterval(
+		() => {
+			if (gameState === false) {
+				clearInterval(timer);
+			}
+			let time1 = (new Date() - time) / 1000;
+			submittion.forEach(
+				(p, i) => {
+					if (
+						p.time <= time1 &&
+						(prevtime + 1) > p.time &&
+						prevtime < p.time &&
+						prevtime !== 0
+					) {
+						bulmaToast.toast({
+							message: `Failed... ${JSON.stringify(p)}`,
+							type: "is-danger",
+							dismissible: true,
+							pauseOnHover: true,
+							duration: 2000,
+							animate: { in: "fadeIn", out: "fadeOut" },
+							position: "bottom-center",
+						});
+						console.log(`Failed... ${JSON.stringify(p)}`);
+						submittion.splice(i, 1);
+					} else if (
+						p.time <= time1 && (prevtime === 0 || (prevtime + 1) <= p.time)
+					) {
+						console.log(`canvasw = ${canvas.width / 2}`);
+						projectiles.push(
+							new Projectile(
+								p.time,
+								(canvas.width / 2) + (p.x * (time1 - p.time)),
+								(canvas.height / 2) + (p.y * (time1 - p.time)),
+								5,
+								"white",
+								{ x: p.x, y: p.y },
+							),
+						);
+						answer.push(JSON.stringify(new Ans(p.time, p.x, p.y)));
+						submittion.splice(i, 1);
+						console.log(`projectiles1 = ${JSON.stringify(projectiles)}`);
+						prevtime = p.time;
+						statusEl.innerHTML = "Reloading...";
+						statusEl.style.backgroundColor = "rgb(239 68 68)";
+					}
+				},
+			);
+		},
+		1,
+	);
 }
 
 startGameBtn.addEventListener(
