@@ -127,7 +127,8 @@
     }
 
     class Projectile {
-      constructor(x, y, radius, color, velocity) {
+      constructor(time, x, y, radius, color, velocity) {
+        this.time = time;
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -149,7 +150,8 @@
     }
 
     class Enemy {
-      constructor(x, y, radius, color, velocity) {
+      constructor(time, x, y, radius, color, velocity) {
+        this.time = time;
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -173,7 +175,8 @@
     const friction = 0.99;
 
     class Particle {
-      constructor(x, y, radius, color, velocity) {
+      constructor(time, x, y, radius, color, velocity) {
+        this.time = time;
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -209,6 +212,15 @@
       }
     }
 
+    class Submittion {
+      constructor(time, x, y) {
+        this.time = time;
+        this.x = x;
+        this.y = y;
+        this.used = false;
+      }
+    }
+
     const x = canvas.width / 2;
     const y = canvas.height / 2;
 
@@ -217,6 +229,7 @@
     let enemies = [];
     let particles = [];
     let answer = [];
+    let submittion = [];
     let gameState = false;
     let time = new Date();
 
@@ -234,7 +247,9 @@
     }
 
     function spawnEnemies() {
-      setInterval(() => {
+      var timer = setInterval(() => {
+        if (gameState === false) clearInterval(timer);
+        var time1 = new Date();
         const radius = Math.random() * (30 - 4) + 4;
         let x, y;
         if (Math.random() < 0.5) {
@@ -247,13 +262,16 @@
         const color = `hsl(${Math.random() * 360},50%,50%)`;
         const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
         const velocity = { x: Math.cos(angle), y: Math.sin(angle) };
-        enemies.push(new Enemy(x, y, radius, color, velocity));
+        enemies.push(
+          new Enemy((time1 - time) / 1000, x, y, radius, color, velocity)
+        );
       }, 1000);
     }
 
     let animationId;
     let score = 0;
     function animate() {
+      var time1 = (new Date() - time) / 1000;
       animationId = requestAnimationFrame(animate);
       c.fillStyle = "rgba(0,0,0,0.1)";
       c.fillRect(0, 0, canvas.width, canvas.height);
@@ -287,7 +305,6 @@
           modalEl.style.display = "flex";
           bigScoreEl.innerHTML = score;
           gameState = false;
-          console.log(answer);
         }
         projectiles.forEach((projectile, projectileIndex) => {
           const dist = Math.hypot(
@@ -297,10 +314,17 @@
           if (dist - enemy.radius - projectile.radius < 1) {
             for (let i = 0; i < enemy.radius * 2; ++i) {
               particles.push(
-                new Particle(projectile.x, projectile.y, 3, enemy.color, {
-                  x: (Math.random() - 0.5) * (Math.random() * 5),
-                  y: (Math.random() - 0.5) * (Math.random() * 5),
-                })
+                new Particle(
+                  projectile.time,
+                  projectile.x,
+                  projectile.y,
+                  3,
+                  enemy.color,
+                  {
+                    x: (Math.random() - 0.5) * (Math.random() * 5),
+                    y: (Math.random() - 0.5) * (Math.random() * 5),
+                  }
+                )
               );
             }
             if (enemy.radius - 10 > 10) {
@@ -330,13 +354,12 @@
         event.offsetX - canvas.width / 2
       );
       const velocity = { x: Math.cos(angle) * 5, y: Math.sin(angle) * 5 };
-      var time1 = new Date();
+      var time1 = (new Date() - time) / 1000;
       if (gameState === true)
-        answer.push(
-          JSON.stringify(new Ans((time1 - time) / 1000, velocity.x, velocity.y))
-        );
+        answer.push(JSON.stringify(new Ans(time1, velocity.x, velocity.y)));
       projectiles.push(
         new Projectile(
+          time1,
           canvas.width / 2,
           canvas.height / 2,
           5,
@@ -344,7 +367,29 @@
           velocity
         )
       );
+      console.log(`projectiles = ${JSON.stringify(projectiles)}`);
     });
+
+    function checkBullet() {
+      canvasw2 = canvas.width / 2;
+      canvash2 = canvas.height / 2;
+      var timer = setInterval(() => {
+        if (gameState === false) clearInterval(timer);
+        let time1 = (new Date() - time) / 1000;
+        submittion.forEach((p, i) => {
+          if (p.time <= time1 && p.used === false) {
+            console.log(`x = ${x}`);
+            console.log(`cw = ${canvasw2}`);
+            console.log(`ch = ${canvash2}`);
+            projectiles.push(
+              new Projectile(p.time, canvasw2, canvash2, 5, "white", [p.x, p.y])
+            );
+            p.used = true;
+            console.log(`projectiles1 = ${JSON.stringify(projectiles)}`);
+          }
+        });
+      });
+    }
 
     startGameBtn.addEventListener("click", () => {
       init();
@@ -353,7 +398,11 @@
       exportAnswerEl.style.display = "none";
     });
     exportGameElBtn.addEventListener("click", () => {
-      answerFromEl.value = answer;
+      let exportAnswer = [];
+      answer.forEach((x, i) => {
+        exportAnswer.push(JSON.parse(x));
+      });
+      answerFromEl.value = JSON.stringify(exportAnswer);
       if (exportAnswerEl.style.display == "flex")
         exportAnswerEl.style.display = "none";
       else exportAnswerEl.style.display = "flex";
@@ -369,8 +418,14 @@
       }
     });
     submitBtnEl.addEventListener("click", () => {
+      submittion = [];
+      sub = JSON.parse(submitFormEl.value);
+      sub.forEach((x, i) => {
+        submittion.push(new Submittion(x.time, x.x, x.y));
+      });
+      console.log(submittion);
       init();
-      animate(), spawnEnemies();
+      animate(), spawnEnemies(), checkBullet();
       modalEl.style.display = "none";
       exportAnswerEl.style.display = "none";
     });
