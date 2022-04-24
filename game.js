@@ -1,37 +1,36 @@
-var canvas = document.querySelector("canvas");
-var c = canvas.getContext("2d");
+const canvas = document.querySelector("canvas");
+const c = canvas.getContext("2d");
 canvas.width = innerWidth;
 canvas.height = innerHeight;
-var timeEl = document.querySelector("#timeEl");
-var scoreEl = document.querySelector("#scoreEl");
-var statusEl = document.querySelector("#statusEl");
-var startGameBtn = document.querySelector("#startGameElBtn");
-var modalEl = document.querySelector("#modalEl");
-var bigScoreEl = document.querySelector("#bigScoreEl");
-var exportGameElBtn = document.querySelector("#exportGameElBtn");
-var exportAnswerEl = document.querySelector("#exportAnswerEl");
-var answerFromEl = document.querySelector("#answerFromEl");
-var submitGameElBtn = document.querySelector("#submitGameElBtn");
-var submitFormEl = document.querySelector("#submitFormEl");
-var submitAnswerEl = document.querySelector("#submitAnswerEl");
-var submitBtnEl = document.querySelector("#submitBtnEl");
-var Player = /** @class */ (function () {
-    function Player(x, y, radius, color) {
+const timeEl = document.querySelector("#timeEl");
+const scoreEl = document.querySelector("#scoreEl");
+const statusEl = document.querySelector("#statusEl");
+const startGameBtn = document.querySelector("#startGameElBtn");
+const modalEl = document.querySelector("#modalEl");
+const bigScoreEl = document.querySelector("#bigScoreEl");
+const exportGameElBtn = document.querySelector("#exportGameElBtn");
+const exportAnswerEl = document.querySelector("#exportAnswerEl");
+const answerFromEl = document.querySelector("#answerFromEl");
+const submitGameElBtn = document.querySelector("#submitGameElBtn");
+const submitFormEl = document.querySelector("#submitFormEl");
+const submitAnswerEl = document.querySelector("#submitAnswerEl");
+const submitBtnEl = document.querySelector("#submitBtnEl");
+class Player {
+    constructor(x, y, radius, color) {
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.color = color;
     }
-    Player.prototype.draw = function () {
+    draw() {
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         c.fillStyle = this.color;
         c.fill();
-    };
-    return Player;
-}());
-var Projectile = /** @class */ (function () {
-    function Projectile(time, x, y, radius, color, velocity) {
+    }
+}
+class Projectile {
+    constructor(time, x, y, radius, color, velocity) {
         this.time = time;
         this.x = x;
         this.y = y;
@@ -39,44 +38,43 @@ var Projectile = /** @class */ (function () {
         this.color = color;
         this.velocity = velocity;
     }
-    Projectile.prototype.draw = function () {
+    draw() {
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         c.fillStyle = this.color;
         c.fill();
-    };
-    Projectile.prototype.update = function () {
+    }
+    update() {
         this.draw();
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
-    };
-    return Projectile;
-}());
-var Enemy = /** @class */ (function () {
-    function Enemy(time, x, y, radius, color, velocity) {
+    }
+}
+class Enemy {
+    constructor(time, x, y, radius, color, velocity, point) {
         this.time = time;
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.color = color;
         this.velocity = velocity;
+        this.point = point;
     }
-    Enemy.prototype.draw = function () {
+    draw() {
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         c.fillStyle = this.color;
         c.fill();
-    };
-    Enemy.prototype.update = function () {
+    }
+    update() {
         this.draw();
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
-    };
-    return Enemy;
-}());
-var friction = 0.99;
-var Particle = /** @class */ (function () {
-    function Particle(time, x, y, radius, color, velocity) {
+    }
+}
+const friction = 0.99;
+class Particle {
+    constructor(time, x, y, radius, color, velocity) {
         this.time = time;
         this.x = x;
         this.y = y;
@@ -85,7 +83,7 @@ var Particle = /** @class */ (function () {
         this.velocity = velocity;
         this.alpha = 1;
     }
-    Particle.prototype.draw = function () {
+    draw() {
         c.save();
         c.globalAlpha = this.alpha;
         c.beginPath();
@@ -93,44 +91,41 @@ var Particle = /** @class */ (function () {
         c.fillStyle = this.color;
         c.fill();
         c.restore();
-    };
-    Particle.prototype.update = function () {
+    }
+    update() {
         this.draw();
         this.velocity.x *= friction;
         this.velocity.y *= friction;
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
         this.alpha -= 0.01;
-    };
-    return Particle;
-}());
-var Ans = /** @class */ (function () {
-    function Ans(time, x, y) {
+    }
+}
+class Ans {
+    constructor(time, x, y) {
         this.time = time;
         this.x = x;
         this.y = y;
     }
-    return Ans;
-}());
-var Submittion = /** @class */ (function () {
-    function Submittion(time, x, y) {
+}
+class Submittion {
+    constructor(time, x, y) {
         this.time = time;
         this.x = x;
         this.y = y;
     }
-    return Submittion;
-}());
-var x = canvas.width / 2;
-var y = canvas.height / 2;
-var player = new Player(x, y, 10, "white");
-var projectiles = [];
-var enemies = [];
-var particles = [];
-var answer = [];
-var submittion = [];
-var gameState = false;
-var time = new Date();
-var prevtime = 0;
+}
+const x = canvas.width / 2;
+const y = canvas.height / 2;
+let player = new Player(x, y, 10, "white");
+let projectiles = [];
+let enemies = [];
+let particles = [];
+let answer = [];
+let submittion = [];
+let gameState = false;
+let time = new Date();
+let prevtime = 0;
 function init() {
     gameState = true;
     time = new Date();
@@ -147,13 +142,13 @@ function init() {
     prevtime = 0;
 }
 function spawnEnemies() {
-    var timer = setInterval(function () {
+    var timer = setInterval(() => {
         if (gameState === false) {
             clearInterval(timer);
         }
         var time1 = new Date();
-        var radius = Math.random() * (30 - 4) + 4;
-        var x, y;
+        const radius = Math.random() * (30 - 4) + 4;
+        let x, y;
         if (Math.random() < 0.5) {
             x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius;
             y = canvas.height * Math.random();
@@ -162,14 +157,15 @@ function spawnEnemies() {
             x = canvas.width * Math.random();
             y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius;
         }
-        var color = "hsl(".concat(Math.random() * 360, ",50%,50%)");
-        var angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
-        var velocity = { x: Math.cos(angle), y: Math.sin(angle) };
-        enemies.push(new Enemy((time1.getTime() - time.getTime()) / 1000, x, y, radius, color, velocity));
+        const color = `hsl(${Math.random() * 360},50%,50%)`;
+        const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
+        const velocity = { x: Math.cos(angle), y: Math.sin(angle) };
+        const point = 1000 * Math.random();
+        enemies.push(new Enemy((time1.getTime() - time.getTime()) / 1000, x, y, radius, color, velocity, point));
     }, 1000);
 }
-var animationId;
-var score = 0;
+let animationId;
+let score = 0;
 function animate() {
     var time1 = (new Date().getTime() - time.getTime()) / 1000;
     if (prevtime + 1 <= time1 || prevtime === 0) {
@@ -180,7 +176,7 @@ function animate() {
     c.fillStyle = "rgba(0,0,0,0.1)";
     c.fillRect(0, 0, canvas.width, canvas.height);
     player.draw();
-    particles.forEach(function (particle, particleIndex) {
+    particles.forEach((particle, particleIndex) => {
         if (particle.alpha <= 0) {
             particles.splice(particleIndex, 1);
         }
@@ -188,47 +184,47 @@ function animate() {
             particle.update();
         }
     });
-    projectiles.forEach(function (projectile, projectileIndex) {
+    projectiles.forEach((projectile, projectileIndex) => {
         projectile.update();
         if (projectile.x - projectile.radius < 0 ||
             projectile.x - projectile.radius > canvas.width ||
             projectile.y + projectile.radius < 0 ||
             projectile.y - projectile.radius > canvas.height) {
-            setTimeout(function () {
+            setTimeout(() => {
                 projectiles.splice(projectileIndex, 1);
             }, 0);
         }
     });
-    enemies.forEach(function (enemy, enemyIndex) {
+    enemies.forEach((enemy, enemyIndex) => {
         enemy.update();
-        var dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
+        const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
         if (dist - enemy.radius - player.radius < 1) {
             cancelAnimationFrame(animationId);
             modalEl.style.display = "flex";
             bigScoreEl.innerHTML = score.toString();
             gameState = false;
         }
-        projectiles.forEach(function (projectile, projectileIndex) {
-            var dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
+        projectiles.forEach((projectile, projectileIndex) => {
+            const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
             if (dist - enemy.radius - projectile.radius < 1) {
-                for (var i = 0; i < enemy.radius * 2; ++i) {
+                for (let i = 0; i < enemy.radius * 2; ++i) {
                     particles.push(new Particle(projectile.time, projectile.x, projectile.y, 3, enemy.color, {
                         x: (Math.random() - 0.5) * (Math.random() * 5),
-                        y: (Math.random() - 0.5) * (Math.random() * 5)
+                        y: (Math.random() - 0.5) * (Math.random() * 5),
                     }));
                 }
                 if (enemy.radius - 10 > 10) {
                     score += 100;
                     scoreEl.innerHTML = score.toString();
                     gsap.to(enemy, { radius: enemy.radius - 10 });
-                    setTimeout(function () {
+                    setTimeout(() => {
                         projectiles.splice(projectileIndex, 1);
                     }, 0);
                 }
                 else {
-                    score += 250;
+                    score += enemy.point;
                     scoreEl.innerHTML = score.toString();
-                    setTimeout(function () {
+                    setTimeout(() => {
                         enemies.splice(enemyIndex, 1);
                         projectiles.splice(projectileIndex, 1);
                     }, 0);
@@ -239,9 +235,9 @@ function animate() {
     timeEl.innerHTML = ((new Date().getTime() - time.getTime()) /
         1000).toString();
 }
-canvas.addEventListener("click", function (event) {
-    var angle = Math.atan2(event.offsetY - canvas.height / 2, event.offsetX - canvas.width / 2);
-    var velocity = { x: Math.cos(angle) * 5, y: Math.sin(angle) * 5 };
+canvas.addEventListener("click", (event) => {
+    const angle = Math.atan2(event.offsetY - canvas.height / 2, event.offsetX - canvas.width / 2);
+    const velocity = { x: Math.cos(angle) * 5, y: Math.sin(angle) * 5 };
     var time1 = (new Date().getTime() - time.getTime()) / 1000;
     if (prevtime !== 0 && prevtime + 1 > time1) {
         bulmaToast.toast({
@@ -250,8 +246,8 @@ canvas.addEventListener("click", function (event) {
             dismissible: true,
             pauseOnHover: true,
             duration: 1000,
-            animate: { "in": "fadeIn", out: "fadeOut" },
-            position: "bottom-center"
+            animate: { in: "fadeIn", out: "fadeOut" },
+            position: "bottom-center",
         });
     }
     if (prevtime === 0 || prevtime + 1 <= time1) {
@@ -263,74 +259,74 @@ canvas.addEventListener("click", function (event) {
         statusEl.innerHTML = "Reloading...";
         statusEl.style.backgroundColor = "rgb(239 68 68)";
         bulmaToast.toast({
-            message: "Success ".concat(JSON.stringify(new Ans(time1, velocity.x, velocity.y))),
+            message: `Success ${JSON.stringify(new Ans(time1, velocity.x, velocity.y))}`,
             type: "is-success",
             dismissible: true,
             pauseOnHover: true,
             duration: 1000,
-            animate: { "in": "fadeIn", out: "fadeOut" },
-            position: "bottom-center"
+            animate: { in: "fadeIn", out: "fadeOut" },
+            position: "bottom-center",
         });
-        console.log("Success ".concat(JSON.stringify(new Ans(time1, velocity.x, velocity.y))));
+        console.log(`Success ${JSON.stringify(new Ans(time1, velocity.x, velocity.y))}`);
     }
-    console.log("projectiles = ".concat(JSON.stringify(projectiles)));
+    console.log(`projectiles = ${JSON.stringify(projectiles)}`);
 });
 function checkBullet() {
-    var timer = setInterval(function () {
+    var timer = setInterval(() => {
         if (gameState === false) {
             clearInterval(timer);
         }
-        var time1 = (new Date().getTime() - time.getTime()) / 1000;
-        submittion.forEach(function (p, i) {
+        let time1 = (new Date().getTime() - time.getTime()) / 1000;
+        submittion.forEach((p, i) => {
             if (p.time <= time1 &&
                 prevtime + 1 > p.time &&
                 prevtime < p.time &&
                 prevtime !== 0) {
                 bulmaToast.toast({
-                    message: "Failed... ".concat(JSON.stringify(p)),
+                    message: `Failed... ${JSON.stringify(p)}`,
                     type: "is-danger",
                     dismissible: true,
                     pauseOnHover: true,
                     duration: 2000,
-                    animate: { "in": "fadeIn", out: "fadeOut" },
-                    position: "bottom-center"
+                    animate: { in: "fadeIn", out: "fadeOut" },
+                    position: "bottom-center",
                 });
-                console.log("Failed... ".concat(JSON.stringify(p)));
+                console.log(`Failed... ${JSON.stringify(p)}`);
                 submittion.splice(i, 1);
             }
             else if (p.time <= time1 &&
                 (prevtime === 0 || prevtime + 1 <= p.time)) {
-                console.log("canvasw = ".concat(canvas.width / 2));
+                console.log(`canvasw = ${canvas.width / 2}`);
                 projectiles.push(new Projectile(p.time, canvas.width / 2 + p.x * (time1 - p.time), canvas.height / 2 + p.y * (time1 - p.time), 5, "white", { x: p.x, y: p.y }));
                 answer.push(JSON.stringify(new Ans(p.time, p.x, p.y)));
                 submittion.splice(i, 1);
-                console.log("projectiles1 = ".concat(JSON.stringify(projectiles)));
+                console.log(`projectiles1 = ${JSON.stringify(projectiles)}`);
                 prevtime = p.time;
                 statusEl.innerHTML = "Reloading...";
                 statusEl.style.backgroundColor = "rgb(239 68 68)";
                 bulmaToast.toast({
-                    message: "Success ".concat(JSON.stringify(new Ans(p.time, p.x, p.y))),
+                    message: `Success ${JSON.stringify(new Ans(p.time, p.x, p.y))}`,
                     type: "is-success",
                     dismissible: true,
                     pauseOnHover: true,
                     duration: 1000,
-                    animate: { "in": "fadeIn", out: "fadeOut" },
-                    position: "bottom-center"
+                    animate: { in: "fadeIn", out: "fadeOut" },
+                    position: "bottom-center",
                 });
-                console.log("Success ".concat(JSON.stringify(new Ans(p.time, p.x, p.y))));
+                console.log(`Success ${JSON.stringify(new Ans(p.time, p.x, p.y))}`);
             }
         });
     }, 1);
 }
-startGameBtn.addEventListener("click", function () {
+startGameBtn.addEventListener("click", () => {
     init();
     animate(), spawnEnemies();
     modalEl.style.display = "none";
     exportAnswerEl.style.display = "none";
 });
-exportGameElBtn.addEventListener("click", function () {
-    var exportAnswer = [];
-    answer.forEach(function (x, i) {
+exportGameElBtn.addEventListener("click", () => {
+    let exportAnswer = [];
+    answer.forEach((x, i) => {
         exportAnswer.push(JSON.parse(x));
     });
     answerFromEl.value = JSON.stringify(exportAnswer, null, 2);
@@ -341,7 +337,7 @@ exportGameElBtn.addEventListener("click", function () {
         exportAnswerEl.style.display = "flex";
     }
 });
-submitGameElBtn.addEventListener("click", function () {
+submitGameElBtn.addEventListener("click", () => {
     submitFormEl.value = "";
     if (submitAnswerEl.style.display == "flex") {
         submitAnswerEl.style.display = "none";
@@ -352,10 +348,10 @@ submitGameElBtn.addEventListener("click", function () {
         submitBtnEl.style.display = "inline-block";
     }
 });
-submitBtnEl.addEventListener("click", function () {
+submitBtnEl.addEventListener("click", () => {
     submittion = [];
-    var sub = JSON.parse(submitFormEl.value);
-    sub.forEach(function (x, i) {
+    let sub = JSON.parse(submitFormEl.value);
+    sub.forEach((x, i) => {
         submittion.push(new Submittion(x.time, x.x, x.y));
     });
     console.log(submittion);
@@ -364,3 +360,4 @@ submitBtnEl.addEventListener("click", function () {
     modalEl.style.display = "none";
     exportAnswerEl.style.display = "none";
 });
+//# sourceMappingURL=game.js.map
