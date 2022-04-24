@@ -218,7 +218,7 @@ function spawnEnemies() {
     const color = `hsl(${Math.random() * 360},50%,50%)`;
     const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
     const velocity = { x: Math.cos(angle), y: Math.sin(angle) };
-    const point = 1000 * Math.random();
+    const point = Math.floor(1000 * Math.random());
     enemies.push(
       new Enemy(
         (time1.getTime() - time.getTime()) / 1000,
