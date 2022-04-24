@@ -348,6 +348,20 @@ canvas.addEventListener("click", (event) => {
     }
     statusEl.innerHTML = "Reloading...";
     (<HTMLElement>statusEl).style.backgroundColor = "rgb(239 68 68)";
+    bulmaToast.toast({
+      message: `Success ${JSON.stringify(
+        new Ans(time1, velocity.x, velocity.y)
+      )}`,
+      type: "is-success",
+      dismissible: true,
+      pauseOnHover: true,
+      duration: 1000,
+      animate: { in: "fadeIn", out: "fadeOut" },
+      position: "bottom-center",
+    });
+    console.log(
+      `Success ${JSON.stringify(new Ans(time1, velocity.x, velocity.y))}`
+    );
   }
 
   console.log(`projectiles = ${JSON.stringify(projectiles)}`);
@@ -398,6 +412,16 @@ function checkBullet() {
         prevtime = p.time;
         statusEl.innerHTML = "Reloading...";
         (<HTMLElement>statusEl).style.backgroundColor = "rgb(239 68 68)";
+        bulmaToast.toast({
+          message: `Success ${JSON.stringify(new Ans(p.time, p.x, p.y))}`,
+          type: "is-success",
+          dismissible: true,
+          pauseOnHover: true,
+          duration: 1000,
+          animate: { in: "fadeIn", out: "fadeOut" },
+          position: "bottom-center",
+        });
+        console.log(`Success ${JSON.stringify(new Ans(p.time, p.x, p.y))}`);
       }
     });
   }, 1);

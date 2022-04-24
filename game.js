@@ -262,6 +262,16 @@ canvas.addEventListener("click", function (event) {
         }
         statusEl.innerHTML = "Reloading...";
         statusEl.style.backgroundColor = "rgb(239 68 68)";
+        bulmaToast.toast({
+            message: "Success ".concat(JSON.stringify(new Ans(time1, velocity.x, velocity.y))),
+            type: "is-success",
+            dismissible: true,
+            pauseOnHover: true,
+            duration: 1000,
+            animate: { "in": "fadeIn", out: "fadeOut" },
+            position: "bottom-center"
+        });
+        console.log("Success ".concat(JSON.stringify(new Ans(time1, velocity.x, velocity.y))));
     }
     console.log("projectiles = ".concat(JSON.stringify(projectiles)));
 });
@@ -298,6 +308,16 @@ function checkBullet() {
                 prevtime = p.time;
                 statusEl.innerHTML = "Reloading...";
                 statusEl.style.backgroundColor = "rgb(239 68 68)";
+                bulmaToast.toast({
+                    message: "Success ".concat(JSON.stringify(new Ans(p.time, p.x, p.y))),
+                    type: "is-success",
+                    dismissible: true,
+                    pauseOnHover: true,
+                    duration: 1000,
+                    animate: { "in": "fadeIn", out: "fadeOut" },
+                    position: "bottom-center"
+                });
+                console.log("Success ".concat(JSON.stringify(new Ans(p.time, p.x, p.y))));
             }
         });
     }, 1);
