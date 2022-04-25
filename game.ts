@@ -261,6 +261,43 @@ function animate() {
     (<HTMLElement>statusEl).style.backgroundColor = "rgb(34 197 94)";
   }
   animationId = requestAnimationFrame(animate);
+
+  c.beginPath();
+  c.moveTo(0, canvas.height / 2);
+  c.lineTo(canvas.width, canvas.height / 2);
+  c.strokeStyle = "rgba(255,255,255, 0.9)";
+  c.stroke();
+
+  c.beginPath();
+  c.moveTo(canvas.width / 2, 0);
+  c.lineTo(canvas.width / 2, canvas.height);
+  c.strokeStyle = "rgba(255,255,255, 0.9)";
+  c.stroke();
+
+  c.beginPath();
+  c.moveTo(0, 0);
+  c.lineTo(0, canvas.height);
+  c.strokeStyle = "rgba(255,255,255, 0.9)";
+  c.stroke();
+
+  c.beginPath();
+  c.moveTo(0, 0);
+  c.lineTo(canvas.width, 0);
+  c.strokeStyle = "rgba(255,255,255, 0.9)";
+  c.stroke();
+
+  c.beginPath();
+  c.moveTo(canvas.width, canvas.height);
+  c.lineTo(canvas.width, 0);
+  c.strokeStyle = "rgba(255,255,255, 0.9)";
+  c.stroke();
+
+  c.beginPath();
+  c.moveTo(canvas.width, canvas.height);
+  c.lineTo(0, canvas.height);
+  c.strokeStyle = "rgba(255,255,255, 0.9)";
+  c.stroke();
+
   c.fillStyle = "rgba(0,0,0,0.1)";
   c.fillRect(0, 0, canvas.width, canvas.height);
   player.draw();
