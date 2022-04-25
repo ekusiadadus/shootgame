@@ -1,7 +1,11 @@
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
-canvas.width = innerWidth;
-canvas.height = innerHeight;
+// canvas.width = innerWidth;
+// canvas.height = innerHeight;
+canvas.width = 1000;
+canvas.height = 1000;
+console.log(`canvas.width = ${canvas.width}`);
+console.log(`canvas.height = ${canvas.height}`);
 const timeEl = document.querySelector("#timeEl");
 const scoreEl = document.querySelector("#scoreEl");
 const statusEl = document.querySelector("#statusEl");
@@ -126,6 +130,7 @@ let submittion = [];
 let gameState = false;
 let time = new Date();
 let prevtime = 0;
+let test = [];
 function init() {
     gameState = true;
     time = new Date();
@@ -134,6 +139,7 @@ function init() {
     enemies = [];
     particles = [];
     answer = [];
+    test = [];
     score = 0;
     scoreEl.innerHTML = score.toString();
     statusEl.innerHTML = "Ready!";
@@ -162,6 +168,7 @@ function spawnEnemies() {
         const velocity = { x: Math.cos(angle), y: Math.sin(angle) };
         const point = Math.floor(1000 * Math.random());
         enemies.push(new Enemy((time1.getTime() - time.getTime()) / 1000, x, y, radius, color, velocity, point));
+        test.push(new Enemy((time1.getTime() - time.getTime()) / 1000, x, y, radius, color, velocity, point));
     }, 1000);
 }
 let animationId;
@@ -203,6 +210,7 @@ function animate() {
             modalEl.style.display = "flex";
             bigScoreEl.innerHTML = score.toString();
             gameState = false;
+            console.log(test);
         }
         projectiles.forEach((projectile, projectileIndex) => {
             const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
@@ -269,7 +277,6 @@ canvas.addEventListener("click", (event) => {
         });
         console.log(`Success ${JSON.stringify(new Ans(time1, velocity.x, velocity.y))}`);
     }
-    console.log(`projectiles = ${JSON.stringify(projectiles)}`);
 });
 function checkBullet() {
     var timer = setInterval(() => {
@@ -296,11 +303,9 @@ function checkBullet() {
             }
             else if (p.time <= time1 &&
                 (prevtime === 0 || prevtime + 1 <= p.time)) {
-                console.log(`canvasw = ${canvas.width / 2}`);
                 projectiles.push(new Projectile(p.time, canvas.width / 2 + p.x * (time1 - p.time), canvas.height / 2 + p.y * (time1 - p.time), 5, "white", { x: p.x, y: p.y }));
                 answer.push(JSON.stringify(new Ans(p.time, p.x, p.y)));
                 submittion.splice(i, 1);
-                console.log(`projectiles1 = ${JSON.stringify(projectiles)}`);
                 prevtime = p.time;
                 statusEl.innerHTML = "Reloading...";
                 statusEl.style.backgroundColor = "rgb(239 68 68)";
