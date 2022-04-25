@@ -26,6 +26,7 @@ const submitGameElBtn = document.querySelector("#submitGameElBtn");
 const submitFormEl = document.querySelector("#submitFormEl");
 const submitAnswerEl = document.querySelector("#submitAnswerEl");
 const submitBtnEl = document.querySelector("#submitBtnEl");
+const twitterBtnEl = document.querySelector("#twitterBtnEl");
 class Player {
   x: number;
   y: number;
@@ -527,4 +528,21 @@ submitBtnEl.addEventListener("click", () => {
   animate(), spawnEnemies(), checkBullet();
   (<HTMLElement>modalEl).style.display = "none";
   (<HTMLElement>exportAnswerEl).style.display = "none";
+});
+
+twitterBtnEl.addEventListener("click", () => {
+  var shareURL = "http://twitter.com/share?";
+  var params = {
+    url: "https://ekusiadadus.github.io/shootgame\n",
+    text: `${score} Points!\n`,
+    via: "ekusiadadus\n",
+    hashtags: "ekshoot\n",
+  };
+  for (var prop in params)
+    shareURL += "&" + prop + "=" + encodeURIComponent(params[prop]);
+  window.open(
+    shareURL,
+    "",
+    "left=0,top=0,width=550,height=450,personalbar=0,toolbar=0,scrollbars=0,resizable=0"
+  );
 });
