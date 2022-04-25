@@ -19,15 +19,12 @@
     }
   </style>
   <div class="absolute text-white text-sm ml-2 mt-1 select-none">
-    <span>Time: </span><span id="timeEl">0</span>
-  </div>
-  <br />
-  <div class="absolute text-white text-sm ml-2 mt-1 select-none">
-    <span>Score: </span><span id="scoreEl">0</span>
-  </div>
-  <br />
-  <div class="absolute text-white text-sm ml-2 mt-1 select-none">
-    <span>Status: </span><span class="bg-green-500" id="statusEl">Ready!</span>
+    <li><span>Time: </span><span id="timeEl">0</span></li>
+    <li><span>Score: </span><span id="scoreEl">0</span></li>
+    <li>
+      <span>Status: </span
+      ><span class="bg-green-500" id="statusEl">Ready!</span>
+    </li>
   </div>
 
   <div
@@ -93,7 +90,7 @@
     </div>
   </div>
 
-  <canvas class="select-none"> </canvas>
+  <canvas class="select-none" width="500" height="500"> </canvas>
 
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.3/gsap.min.js"
