@@ -1,7 +1,6 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
-// canvas.width = innerWidth;
-// canvas.height = innerHeight;
+
 canvas.width = 1000
 canvas.height = 1000
 console.log(`canvas.width = ${canvas.width}`)
@@ -149,13 +148,14 @@ function init() {
   prevtime = 0
 }
 function spawnEnemies() {
-  var timer = setInterval(() => {
+  const timer = setInterval(() => {
     if (gameState === false) {
       clearInterval(timer)
     }
-    var time1 = new Date()
+    const time1 = new Date()
     const radius = Math.random() * (30 - 4) + 4
-    let x, y
+    let x
+    let y
     if (Math.random() < 0.5) {
       x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius
       y = canvas.height * Math.random()
@@ -194,7 +194,7 @@ function spawnEnemies() {
 let animationId
 let score = 0
 function animate() {
-  var time1 = (new Date().getTime() - time.getTime()) / 1000
+  const time1 = (new Date().getTime() - time.getTime()) / 1000
   if (prevtime + 1 <= time1 || prevtime === 0) {
     statusEl.innerHTML = 'Ready!'
     statusEl.style.backgroundColor = 'rgb(34 197 94)'
@@ -307,7 +307,7 @@ canvas.addEventListener('click', (event) => {
     event.offsetX - canvas.width / 2
   )
   const velocity = { x: Math.cos(angle) * 5, y: Math.sin(angle) * 5 }
-  var time1 = (new Date().getTime() - time.getTime()) / 1000
+  const time1 = (new Date().getTime() - time.getTime()) / 1000
   if (prevtime !== 0 && prevtime + 1 > time1) {
     bulmaToast.toast({
       message: 'Reloading...',
@@ -353,11 +353,11 @@ canvas.addEventListener('click', (event) => {
   }
 })
 function checkBullet() {
-  var timer = setInterval(() => {
+  const timer = setInterval(() => {
     if (gameState === false) {
       clearInterval(timer)
     }
-    let time1 = (new Date().getTime() - time.getTime()) / 1000
+    const time1 = (new Date().getTime() - time.getTime()) / 1000
     submittion.forEach((p, i) => {
       if (
         p.time <= time1 &&
@@ -417,12 +417,12 @@ startGameBtn.addEventListener('click', () => {
   exportAnswerEl.style.display = 'none'
 })
 exportGameElBtn.addEventListener('click', () => {
-  let exportAnswer = []
+  const exportAnswer = []
   answer.forEach((x, i) => {
     exportAnswer.push(JSON.parse(x))
   })
   answerFromEl.value = JSON.stringify(exportAnswer, null, 2)
-  if (exportAnswerEl.style.display == 'flex') {
+  if (exportAnswerEl.style.display === 'flex') {
     exportAnswerEl.style.display = 'none'
   } else {
     exportAnswerEl.style.display = 'flex'
@@ -430,7 +430,7 @@ exportGameElBtn.addEventListener('click', () => {
 })
 submitGameElBtn.addEventListener('click', () => {
   submitFormEl.value = ''
-  if (submitAnswerEl.style.display == 'flex') {
+  if (submitAnswerEl.style.display === 'flex') {
     submitAnswerEl.style.display = 'none'
     submitBtnEl.style.display = 'none'
   } else {
@@ -440,7 +440,7 @@ submitGameElBtn.addEventListener('click', () => {
 })
 submitBtnEl.addEventListener('click', () => {
   submittion = []
-  let sub = JSON.parse(submitFormEl.value)
+  const sub = JSON.parse(submitFormEl.value)
   sub.forEach((x, i) => {
     submittion.push(new Submittion(x.time, x.x, x.y))
   })
@@ -453,15 +453,15 @@ submitBtnEl.addEventListener('click', () => {
   exportAnswerEl.style.display = 'none'
 })
 twitterBtnEl.addEventListener('click', () => {
-  var shareURL = 'http://twitter.com/share?'
-  var params = {
+  let shareURL = 'http://twitter.com/share?'
+  const params = {
     url: 'https://ekusiadadus.github.io/shootgame\n',
     text: `${score} Points!\n`,
     via: 'ekusiadadus\n',
     hashtags: 'ekshoot\n'
   }
-  for (var prop in params)
-    shareURL += '&' + prop + '=' + encodeURIComponent(params[prop])
+  for (const prop in params)
+    shareURL += `&${prop}=${encodeURIComponent(params[prop])}`
   window.open(
     shareURL,
     '',
